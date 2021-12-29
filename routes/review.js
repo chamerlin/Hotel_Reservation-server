@@ -41,7 +41,7 @@ router.delete('/:id', auth, async (req, res) => {
     try{
         let review = await Review.findById(req.params.id)
         if(!review) return res.json({msg: "Review not found"})
-        review.author.forEach(async authorDetails => {
+        review.author.forEach(authorDetails => {
             if(authorDetails.authorId.toString() !== req.user.id) return res.json({msg: "This is not your review"})
             else{
                 await review.remove()
