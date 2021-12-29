@@ -52,9 +52,10 @@ router.post('/', auth, async(req, res) => {
                 roomId: bookedRoom._id,
                 roomNumber: bookedRoom.roomNumber
             })
+            bookedRoom.availibility = false
             bookedRoom.save()
         })
-        room.availibility = false
+        
         roomCategory.quantity -= quantity
         await room.save()
         await roomCategory.save()
