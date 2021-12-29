@@ -54,8 +54,9 @@ router.post('/', auth, async(req, res) => {
             })
             bookedRoom.save()
         })
-        
+        room.availibility = false
         roomCategory.quantity -= quantity
+        await room.save()
         await roomCategory.save()
         await reservation.save()
         return res.json({msg: "Reserved", reservation})
@@ -116,9 +117,9 @@ router.put('/:id', auth, async(req, res) => {
             })
             bookedRoom.save()
         })
-        
+        room.availibility = false
         roomCategory.quantity -= quantity
-        
+        await room.save()
         await reservation.save()
         await roomCategory.save()
         return res.json({msg: "Reservation updated successfully", reservation})
