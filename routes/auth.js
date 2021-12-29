@@ -99,8 +99,8 @@ router.post('/googleLogin', async(req, res) => {
             if(user){
                 let payload = {
                     id: user.id,
-                    email: email,
-                    fullname: name,
+                    email: user.email,
+                    fullname: user.name,
                     isAdmin: user.isAdmin
                 }
         
@@ -126,8 +126,8 @@ router.post('/googleLogin', async(req, res) => {
 
                 let payload = {
                     id: user.id,
-                    email: email,
-                    fullname: name,
+                    email: user.email,
+                    fullname: user.name,
                     isAdmin: user.isAdmin
                 }
         
