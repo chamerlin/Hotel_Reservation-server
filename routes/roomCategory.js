@@ -48,25 +48,26 @@ router.put('/:id', auth, async (req, res) => {
     if(!req.user.isAdmin) return res.status(400).json({msg: "Unauthorized not an admin"})
     
     try{
-        let category = await RoomCategory.findById(req.params.id)
-
+        let category = await RoomCategory.findOne({_id: req.params.id})
+        
         if(!category) return res.json({msg: "Not category found"})
-
+        
         const form = new formidable.IncomingForm()
         form.parse(req, async (err, fields, files) => {
             if(err) return res.json({err})
             let date = new Date().getTime()
-
+            
             category.name = fields.name !== "" ? fields.name : category.name
             category.price = fields.price !== "" ? fields.price : category.price
             category.description = fields.description !== "" ? fields.description : category.description
-
+            
             if(files.image == null) {
                 category.image = category.image
             } else {
                 let oldPath = files.image.filepath
                 let newPath = path.join(__dirname, "../public/") + date + "-" + files.image.originalFilename
                 let rawData = fs.readFileSync(oldPath)
+                fs.writeFileSync(newPath, rawData)
                 fs.unlinkSync(path.join(__dirname, "../", category.image))
                 category.image = "/public/" + date + "-" + files.image.originalFilename
             }

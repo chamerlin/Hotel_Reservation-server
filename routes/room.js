@@ -95,21 +95,21 @@ router.delete('/:id', auth, async (req, res) => {
         let roomId = room.category.map(perRoom => perRoom.categoryId)
         let roomCategory = await RoomCategory.findOne({_id: roomId})
         if(!room) return res.json({msg: "Room is not found"})
-
+        
         await room.remove()
-
+        
         let allRoom = await Room.find({})
-
-        roomCategory.quantity = 1
-
+        
+        roomCategory.quantity = 0 
+        
         allRoom.forEach(async perRoom => {
             perRoom.category.forEach(async roomDetails => {
-                if(roomDetails.categoryId === categoryId){
+                if(roomDetails.categoryId === String(roomId)){
                     roomCategory.quantity += 1
                 }
-            }) 
-        })
-            
+            })
+        }) 
+
           await RoomCategory.updateOne({_id: roomId}, roomCategory.quantity)
           await roomCategory.save()
           return res.json({msg: "Room deleted"})
