@@ -49,7 +49,7 @@ router.post('/', auth, async (req, res) =>{
             Availibility: true
         })
         
-        roomCategory.quantity = 0
+        roomCategory.quantity = 1
         allRoom.forEach(async perRoom => {
             perRoom.category.forEach(async roomDetails => {
                 if(roomDetails.categoryId === categoryId){
