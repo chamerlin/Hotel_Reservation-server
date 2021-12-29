@@ -110,7 +110,7 @@ router.delete('/:id', auth, async (req, res) => {
             }) 
         })
             
-          await RoomCategory.updateOne({_id: room.category.forEach(oneCategory => oneCategory)}, roomCategory.quantity)
+          await RoomCategory.updateOne({_id: roomId}, roomCategory.quantity)
           await roomCategory.save()
           return res.json({msg: "Room deleted"})
     } catch(err) {
