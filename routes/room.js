@@ -100,7 +100,7 @@ router.delete('/:id', auth, async (req, res) => {
 
         let allRoom = await Room.find({})
 
-        roomCategory.quantity = 0
+        roomCategory.quantity = 1
 
         allRoom.forEach(async perRoom => {
             perRoom.category.forEach(async roomDetails => {
