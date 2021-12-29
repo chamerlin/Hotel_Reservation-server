@@ -29,7 +29,8 @@ router.post('/', auth, async(req, res) => {
         const { name, numberOfGuest, contactNo, categoryId, quantity, checkInDate, checkInTime, days} = req.body
         const room = await Room.find({categoryId, availibility: true}).limit(quantity)
         const roomCategory = await RoomCategory.findOne({_id: categoryId, quantity: {$gte:0}})
-        
+
+        if(roomCategory === 0) return res.json({msg: 'There is no vacant room in this category'})
         if(quantity > room.length) return res.json({msg: "Number exceed the available rooms"})
 
         const reservation = new Reservation({
