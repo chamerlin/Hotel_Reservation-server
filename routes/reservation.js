@@ -27,12 +27,12 @@ router.post('/', auth, async(req, res) => {
     try{
         const customerId = req.user.id
         const { name, numberOfGuest, contactNo, categoryId, quantity, checkInDate, checkInTime, days} = req.body
-        const room = await Room.find({categoryId, availibility: true}).limit(quantity)
+        const allRoom = await Room.find({})
+        const room = await Room.find({categoryId: roomCategoryId, availibility: true}).limit(quantity)
         const roomCategory = await RoomCategory.findOne({_id: categoryId, quantity: {$gte:0}})
-
         if(roomCategory === 0) return res.json({msg: 'There is no vacant room in this category'})
         if(quantity > room.length) return res.json({msg: "Number exceed the available rooms"})
-
+        
         const reservation = new Reservation({
             customerId,
             customerName: name,
@@ -52,12 +52,9 @@ router.post('/', auth, async(req, res) => {
                 roomId: bookedRoom._id,
                 roomNumber: bookedRoom.roomNumber
             })
-            bookedRoom.availibility = false
             bookedRoom.save()
         })
-        
         roomCategory.quantity -= quantity
-        await room.save()
         await roomCategory.save()
         await reservation.save()
         return res.json({msg: "Reserved", reservation})
@@ -149,7 +146,6 @@ router.delete('/:id', auth, async(req, res) => {
         reservation.rooms.forEach(previousBookedRoom => {
             allRooms.forEach(async rooms => {
                 if(previousBookedRoom.roomId == rooms._id){
-                    rooms.availibility = true
                     await rooms.save()
                 }
 
