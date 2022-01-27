@@ -15,21 +15,6 @@ router.get('/', auth, async (req, res) => {
     }
 })
 
-//VIEW ROOM WITH SAME CATEGORY
-router.get('/search/:key', auth, async (req, res) => {
-    if(!req.user.isAdmin) return res.json({msg: "Unauthorized, not an admin"})
-    try{
-        let rooms = await Room.find({category: {$regex: req.params.key, $options: "i"}})
-        if(rooms.length) {
-            return res.json(rooms)
-        } else {
-            return res.status(400).json({msg: "No product to show"})
-        }
-    }catch(err){
-        return res.status(400).json({msg: "Room can't be found"})
-    }
-})
-
 
 //ADD ROOM
 router.post('/', auth, async (req, res) =>{
